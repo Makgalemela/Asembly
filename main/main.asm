@@ -5,8 +5,6 @@
 ; course : Elen2006
 
 
-
-
 .INCLUDE "./M328Pdef.inc"
 
 
@@ -31,8 +29,8 @@
 Main:
 
 	.def K_region = R21 
-	.def k_region_correct = R21
-	.der Random = R28
+	.def k_region_correct = R24
+	.def Random = R19
 ;....... Stack Initialization.......................
 	ldi R20, HIGH(RAMEND)
 	out SPH, R20
@@ -46,9 +44,7 @@ TIMER1_SETUP:
 			sts TCCR1A ,R16
 			ldi R16 , 0B11000101
 			sts TCCR1B , R16
-			ldi R16 , 0b00000011
-			sts TIMSK1 ,R16
-
+			
 			ldi R16 , 0b00001111						
 			sts TCCR2B , R16
 			ldi R16, 0b00000001
@@ -73,13 +69,7 @@ Display_LED:
 
 			sbi DDRD , 7			
 			sbi DDRD , 6				
-			sbi DDRD , 5
-
-
-TRIGGER:
-	sbi portd , 5
-	rcall DELAY_10us
-	cbi portd , 5
+			sbi DDRD , 4
 
 
 RAISING_EDGE:	in R16 , TIFR1
@@ -105,31 +95,48 @@ DIVISION_By2:
 				SUB R26 , R25
 				BRCC DIVISION_By2
 				DEC  K_region
-				
+				rjmp four
+
 						
-here:
+Test:
+	pop R16
 	out PORTC , K_region
-	rjmp here
+	rcall Trigger
+	rjmp RAISING_EDGE
+
 
 
 
 four:
-	//cbi portd ,6
-	reti
-
+	ldi R16 , 0b00000000
+	sts TIMSK1 ,R16
+	sub K_region, k_region_correct
+	cpi K_region ,0
+	BRNE Red
+	sbi portd ,7
+	rjmp TO
+Red :
+	sbi portd , 6
+TO:
+	push R16
+	lds R16 , GPIOR2
+	sbrs R16, 1
+	rjmp Test
+	rjmp L8
 
 FourSeconds :
 		push R29
 		in R29 , sreg
 		push R29
-									
-		inc R17
-		cpi R17 , 30																	
+		inc r17 
+		cpi r17, 61
 		BRNE L2
-		cbi portd ,7												
-	L2:	
+		clr R17
+	L2:					
 		inc Random 
-		cpi Random  ,12
+		cpi Random  , 12																	
+		BRNE L3 
+		clr Random 
 	L3:								
 		pop R29
 		out  sreg , R29
@@ -138,11 +145,29 @@ FourSeconds :
 
 
 Play_Mode:
-	sei
+		ldi r16, 0b00000001
+		sts  GPIOR2 , R16
+	L8:		
+		mov k_region_correct , Random
+		rcall Trigger
+	L4:
+		out PORTC, k_region_correct
+		jmp RAISING_EDGE
+
+
+
+
+TRIGGER:
+	sbi portd , 4
+	rcall DELAY_10us
+	cbi portd , 4
+	ldi R16 , 0b00000011
+	sts TIMSK1 ,R16
+	ret
 
 DELAY_10us:
     ldi  r18, 53
 L1: dec  r18
     brne L1
     nop
-ret
+	ret
