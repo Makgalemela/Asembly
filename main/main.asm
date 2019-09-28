@@ -57,6 +57,8 @@ TIMER1_SETUP:
 		
 			ldi R16 ,  0
 			sts TCNT2 , R16
+			ldi R16 ,0
+			sts  GPIOR1 , R16
 
 			cbi DDRB , 0
 			sei
@@ -122,6 +124,7 @@ TO:
 	lds R16 , GPIOR2
 	sbrs R16, 1
 	rjmp Test
+	pop R16
 	rjmp L8
 
 FourSeconds :
@@ -149,6 +152,10 @@ Play_Mode:
 		sts  GPIOR2 , R16
 	L8:		
 		mov k_region_correct , Random
+		push R16
+		lds R16 , GPIOR1
+		cpi R16 , 6
+		BREQ GAMEOVER
 		rcall Trigger
 	L4:
 		out PORTC, k_region_correct
@@ -171,3 +178,8 @@ L1: dec  r18
     brne L1
     nop
 	ret
+
+GAMEOVER:
+
+
+	
