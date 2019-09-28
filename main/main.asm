@@ -41,7 +41,8 @@ TIMER1_SETUP_And_other_Interrups:
 			
 			ldi R16 , 0b00001111						
 			sts TCCR2B , R16
-			
+			ldi R16, 0b00000001
+			sts  TIMSk2 , R16
 
 			ldi R16 ,  0
 			sts TCNT1L , R16
@@ -58,17 +59,7 @@ TIMER1_SETUP_And_other_Interrups:
 			ldi R16 , 0b00000011
 			out EIMSK , R16						
 			sei
-;---------------------Reset all interactive registers---------------------------------------------------
-	RESET_ALL :
-			clr K_region
-			clr k_region_correct
-			clr R16
-			sts GPIOR0, K_region
-			sts GPIOR1, K_region
-			sts GPIOR2, K_region
-			ldi R16, 0b00000001
-			sts  TIMSk2 , R16
-			ret
+
 
 ;---------------------------setting up the I/0 pins-------------------------------------------------------
 Display_LED:
@@ -82,10 +73,13 @@ Display_LED:
 			sbi DDRD , 4				; TRIGGER PIN
 
 			cbi DDRB , 0				; Echo Pin , using Imput capture mode of TIMER 1
-			cbi DDRB , 2				; PlayMode button
-			cbi DDRB , 3				; Test Mode Button
+			cbi DDRB , 3				; PlayMode button
+			cbi DDRB , 2				; Test Mode Button			
+		
+		
 
-
+wait_here:
+		rjmp wait	
 ;-----------------------------Setting up Input capture mode-------------------------------------------------
 RAISING_EDGE:	in R16 , TIFR1
 				sbrs R16 , ICF1
@@ -127,10 +121,16 @@ Test_mode :
 
 ;---------------------------------------Timer1 four seconds delay ----------------------------------------
 Delay_4s:
+		sei
 		push R16
 		in R16 , sreg
 		push R16
+		lds R16 , GPIOR2
+		sbrs R16, 1
+		rjmp Test
+
 		ldi R16 , 0b00000000
+		sbi portd, 7
 		cpse R16, r26
 		rjmp TO
 		sts TIMSK1 ,R16
@@ -147,12 +147,8 @@ TO:
 		clr R17
 		clr R16
 		clr K_region
-		lds R16 , GPIOR2
 		pop R16
 		out  sreg , R16
-		pop R16
-		sbrs R16, 1
-		rjmp Test
 		pop R16
 		rjmp L8
 
@@ -161,7 +157,8 @@ TO:
 ; Generate time based random numbers
 ; and time the Led time out
 
-Delay_Gen :
+Delay_Gen : 
+			sei
 			push R29
 			in R29 , sreg
 			push R29
@@ -227,8 +224,6 @@ DELAY_10us:
 ;
 ;
 GAMEOVER:
-		ldi R16, 0b00000000
-		sts  TIMSk2 , R16
 		lds k_region_correct , GPIOR0
 		sbrc K_region_correct , 7
 		sbi portd , 6
@@ -273,4 +268,14 @@ Score_:
 		ldi R16 , 16
 		sts GPIOR0 , R16
 		rjmp L10
+;---------------------Reset all interactive registers---------------------------------------------------
+	RESET_ALL :
+			clr K_region
+			clr k_region_correct
+			clr R16
+			sts GPIOR0, K_region
+			sts GPIOR1, K_region
+			sts GPIOR2, K_region
+			ret
+			
 ;..........................................................END HERE..............................

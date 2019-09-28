@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\1473389\Desktop\main\main\main.asm Sat Sep 28 10:01:01 2019
+AVRASM ver. 2.2.7  C:\Users\1473389\Desktop\main\main\main.asm Sat Sep 28 10:35:28 2019
 
 [builtin](2): Including file 'C:/7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m328pdef.inc'
 C:\Users\1473389\Desktop\main\main\main.asm(8): Including file 'C:/7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\./M328Pdef.inc'
@@ -1043,13 +1043,13 @@ C:\Users\1473389\Desktop\main\main\main.asm(8): Including file 'C:/7.0\Packs\atm
                                  	.org 0x0000
 000000 940c 001c                 		jmp Main
                                  	.org 0x0002
-000002 940c 0069                 		jmp Test_mode	
+000002 940c 0060                 		jmp Test_mode	
                                  	.org 0x0004
-000004 940c 009d                 		jmp Play_Mode
+000004 940c 0096                 		jmp Play_Mode
                                  	.org 0x0012
-000012 940c 008a                 		jmp Delay_Gen
+000012 940c 0082                 		jmp Delay_Gen
                                  	.org 0x001A 
-00001a 940c 006e                 		jmp Delay_4s
+00001a 940c 0065                 		jmp Delay_4s
                                  	
                                  Main:
                                  
@@ -1072,238 +1072,243 @@ C:\Users\1473389\Desktop\main\main\main.asm(8): Including file 'C:/7.0\Packs\atm
                                  			
 000027 e00f                      			ldi R16 , 0b00001111						
 000028 9300 00b1                 			sts TCCR2B , R16
-                                 			
+00002a e001                      			ldi R16, 0b00000001
+00002b 9300 0070                 			sts  TIMSk2 , R16
                                  
-00002a e000                      			ldi R16 ,  0
-00002b 9300 0084                 			sts TCNT1L , R16
 00002d e000                      			ldi R16 ,  0
-00002e 9300 0085                 			sts TCNT1H , R16
-                                 		
+00002e 9300 0084                 			sts TCNT1L , R16
 000030 e000                      			ldi R16 ,  0
-000031 9300 00b2                 			sts TCNT2 , R16
-000033 e000                      			ldi R16 ,0
-000034 9300 002a                 			sts  GPIOR1 , R16
+000031 9300 0085                 			sts TCNT1H , R16
+                                 		
+000033 e000                      			ldi R16 ,  0
+000034 9300 00b2                 			sts TCNT2 , R16
+000036 e000                      			ldi R16 ,0
+000037 9300 002a                 			sts  GPIOR1 , R16
                                  
-000036 e00f                      			ldi R16 , 0b00001111
-000037 9300 0069                 			sts EICRA , R16						
-000039 e003                      			ldi R16 , 0b00000011
-00003a bb0d                      			out EIMSK , R16						
-00003b 9478                      			sei
-                                 ;---------------------Reset all interactive registers---------------------------------------------------
-                                 	RESET_ALL :
-00003c 2755                      			clr K_region
-00003d 2788                      			clr k_region_correct
-00003e 2700                      			clr R16
-00003f 9350 001e                 			sts GPIOR0, K_region
-000041 9350 002a                 			sts GPIOR1, K_region
-000043 9350 002b                 			sts GPIOR2, K_region
-000045 e001                      			ldi R16, 0b00000001
-000046 9300 0070                 			sts  TIMSk2 , R16
-000048 9508                      			ret
+000039 e00f                      			ldi R16 , 0b00001111
+00003a 9300 0069                 			sts EICRA , R16						
+00003c e003                      			ldi R16 , 0b00000011
+00003d bb0d                      			out EIMSK , R16						
+00003e 9478                      			sei
+                                 
                                  
                                  ;---------------------------setting up the I/0 pins-------------------------------------------------------
                                  Display_LED:
-000049 2700                      			clr r16
-00004a e000                      			ldi R16 , 0b000000
-00004b b907                      			out DDRC , R16
+00003f 2700                      			clr r16
+000040 e000                      			ldi R16 , 0b000000
+000041 b907                      			out DDRC , R16
                                  
-00004c 9a57                      			sbi DDRD , 7				; Green LED	
-00004d 9a56                      			sbi DDRD , 6				; RED LED
-00004e 9a55                      			sbi DDRD , 5				; ORANGED LED
-00004f 9a54                      			sbi DDRD , 4				; TRIGGER PIN
+000042 9a57                      			sbi DDRD , 7				; Green LED	
+000043 9a56                      			sbi DDRD , 6				; RED LED
+000044 9a55                      			sbi DDRD , 5				; ORANGED LED
+000045 9a54                      			sbi DDRD , 4				; TRIGGER PIN
                                  
-000050 9820                      			cbi DDRB , 0				; Echo Pin , using Imput capture mode of TIMER 1
-000051 9822                      			cbi DDRB , 2				; PlayMode button
-000052 9823                      			cbi DDRB , 3				; Test Mode Button
+000046 9820                      			cbi DDRB , 0				; Echo Pin , using Imput capture mode of TIMER 1
+000047 9823                      			cbi DDRB , 3				; PlayMode button
+000048 9822                      			cbi DDRB , 2				; Test Mode Button			
+                                 		
+                                 		
                                  
-                                 
+                                 wait_here:
+000049 c015                      		rjmp wait	
                                  ;-----------------------------Setting up Input capture mode-------------------------------------------------
-000053 b306                      RAISING_EDGE:	in R16 , TIFR1
-000054 ff05                      				sbrs R16 , ICF1
-000055 cffd                      				rjmp RAISING_EDGE
-000056 bb06                      				out TIFR1 , R16
-000057 9190 0086                 				lds R25 , ICR1L
-000059 e005                      				ldi R16 , 0B00000101
-00005a 9300 0081                 				sts TCCR1B , R16
+00004a b306                      RAISING_EDGE:	in R16 , TIFR1
+00004b ff05                      				sbrs R16 , ICF1
+00004c cffd                      				rjmp RAISING_EDGE
+00004d bb06                      				out TIFR1 , R16
+00004e 9190 0086                 				lds R25 , ICR1L
+000050 e005                      				ldi R16 , 0B00000101
+000051 9300 0081                 				sts TCCR1B , R16
                                  			
-00005c b306                      FALLING_EDGE:	in R16 , TIFR1
-00005d ff05                      				sbrs R16 , ICF1
-00005e cffd                      				rjmp FALLING_EDGE
-00005f 91a0 0086                 				lds R26 , ICR1L
-000061 bb06                      				out TIFR1 , R16
+000053 b306                      FALLING_EDGE:	in R16 , TIFR1
+000054 ff05                      				sbrs R16 , ICF1
+000055 cffd                      				rjmp FALLING_EDGE
+000056 91a0 0086                 				lds R26 , ICR1L
+000058 bb06                      				out TIFR1 , R16
                                  
                                  ;--------------------------------- Getting the period--------------------------------------------------------
                                  GET_K_REGION:
-000062 1ba9                      				sub R26 , R25
-000063 e092                      				ldi R25 ,2
+000059 1ba9                      				sub R26 , R25
+00005a e092                      				ldi R25 ,2
                                  ;--------------------------------Deividing the preiod by two-----------------------------------------
                                  DIVISION_By2:
-000064 9553                      				INC K_region
-000065 1ba9                      				SUB R26 , R25
-000066 f7e8                      				BRCC DIVISION_By2
-000067 955a                      				DEC  K_region
+00005b 9553                      				INC K_region
+00005c 1ba9                      				SUB R26 , R25
+00005d f7e8                      				BRCC DIVISION_By2
+00005e 955a                      				DEC  K_region
                                  
                                  		wait:
-000068 cfff                      			rjmp wait
+00005f cfff                      			rjmp wait
                                  
                                  ;----------------------------------------Main loop that drives test mode of the Game--------------------------
                                  
                                  Test_mode :
-000069 dfd2                      	rcall	RESET_ALL					
+000060 d079                      	rcall	RESET_ALL					
                                  	Test:
-00006a 910f                      	pop R16
-00006b b958                      	out PORTC , K_region
-00006c d042                      	rcall Trigger
-00006d cfe5                      	rjmp RAISING_EDGE
+000061 910f                      	pop R16
+000062 b958                      	out PORTC , K_region
+000063 d044                      	rcall Trigger
+000064 cfe5                      	rjmp RAISING_EDGE
                                  
                                  ;---------------------------------------Timer1 four seconds delay ----------------------------------------
                                  Delay_4s:
-00006e 930f                      		push R16
-00006f b70f                      		in R16 , sreg
-000070 930f                      		push R16
-000071 e000                      		ldi R16 , 0b00000000
-000072 130a                      		cpse R16, r26
-000073 c00a                      		rjmp TO
-000074 9300 006f                 		sts TIMSK1 ,R16
-000076 1b58                      		sub K_region, k_region_correct
-000077 3050                      		cpi K_region ,0
-000078 f419                      		BRNE Red
-000079 9a5f                      		sbi portd ,7
-00007a d053                      		rcall score_
-00007b c002                      		rjmp TO
+000065 9478                      		sei
+000066 930f                      		push R16
+000067 b70f                      		in R16 , sreg
+000068 930f                      		push R16
+000069 9100 002b                 		lds R16 , GPIOR2
+00006b ff01                      		sbrs R16, 1
+00006c cff4                      		rjmp Test
+                                 
+00006d e000                      		ldi R16 , 0b00000000
+00006e 9a5f                      		sbi portd, 7
+00006f 130a                      		cpse R16, r26
+000070 c00a                      		rjmp TO
+000071 9300 006f                 		sts TIMSK1 ,R16
+000073 1b58                      		sub K_region, k_region_correct
+000074 3050                      		cpi K_region ,0
+000075 f419                      		BRNE Red
+000076 9a5f                      		sbi portd ,7
+000077 d04c                      		rcall score_
+000078 c002                      		rjmp TO
                                  Red :
-00007c 9a5e                      		sbi portd , 6
-00007d d046                      		rcall decScore
+000079 9a5e                      		sbi portd , 6
+00007a d03f                      		rcall decScore
                                  TO:
-00007e 2711                      		clr R17
-00007f 2700                      		clr R16
-000080 2755                      		clr K_region
-000081 9100 002b                 		lds R16 , GPIOR2
-000083 910f                      		pop R16
-000084 bf0f                      		out  sreg , R16
-000085 910f                      		pop R16
-000086 ff01                      		sbrs R16, 1
-000087 cfe2                      		rjmp Test
-000088 910f                      		pop R16
-000089 c017                      		rjmp L8
+00007b 2711                      		clr R17
+00007c 2700                      		clr R16
+00007d 2755                      		clr K_region
+00007e 910f                      		pop R16
+00007f bf0f                      		out  sreg , R16
+000080 910f                      		pop R16
+000081 c018                      		rjmp L8
                                  
                                  
                                  ;----------------his loop has two functions---------------------------------------------
                                  ; Generate time based random numbers
                                  ; and time the Led time out
                                  
-                                 Delay_Gen :
-00008a 93df                      			push R29
-00008b b7df                      			in R29 , sreg
-00008c 93df                      			push R29
-00008d 9513                      			inc R17 
-00008e 331d                      			cpi R17, 61
-00008f f421                      			BRNE L2
-000090 2711                      			clr R17
-000091 985f                      			cbi portd , 7
-000092 985e                      			cbi portd , 6
-000093 985d                      			cbi portd , 5
+                                 Delay_Gen : 
+000082 9478                      			sei
+000083 93df                      			push R29
+000084 b7df                      			in R29 , sreg
+000085 93df                      			push R29
+000086 9513                      			inc R17 
+000087 331d                      			cpi R17, 61
+000088 f421                      			BRNE L2
+000089 2711                      			clr R17
+00008a 985f                      			cbi portd , 7
+00008b 985e                      			cbi portd , 6
+00008c 985d                      			cbi portd , 5
                                  		L2:					
-000094 9533                      			inc Random						; For each and every overflow timer2 a count is made 
-000095 303c                      			cpi Random  , 12																	
-000096 f411                      			BRNE L3 
-000097 2733                      			clr Random						; count reset to one when random become equal to 12
-000098 9533                      			inc Random	
+00008d 9533                      			inc Random						; For each and every overflow timer2 a count is made 
+00008e 303c                      			cpi Random  , 12																	
+00008f f411                      			BRNE L3 
+000090 2733                      			clr Random						; count reset to one when random become equal to 12
+000091 9533                      			inc Random	
                                  		L3:								
-000099 91df                      			pop R29
-00009a bfdf                      			out  sreg , R29
-00009b 91df                      			pop R29
-00009c 9518                      			reti
+000092 91df                      			pop R29
+000093 bfdf                      			out  sreg , R29
+000094 91df                      			pop R29
+000095 9518                      			reti
                                  
                                  ;--------------------------The main loop for the playing mode-----------------------------
                                  Play_Mode:
-00009d e001                      		ldi r16, 0b00000001
-00009e 9300 002b                 		sts  GPIOR2 , R16
-0000a0 df9b                      		rcall	RESET_ALL	
-0000a1 9478                      	L8:	sei
-0000a2 2f83                      		mov k_region_correct , Random
-0000a3 930f                      		push R16
-0000a4 9100 002a                 		lds R16 , GPIOR1
-0000a6 3006                      		cpi R16 , 6
-0000a7 f099                      		BREQ GAMEOVER
-0000a8 d006                      		rcall Trigger
-0000a9 9503                      		inc R16
-0000aa 9300 002a                 		sts GPIOR1 , R16
-0000ac 910f                      		pop R16
+000096 e001                      		ldi r16, 0b00000001
+000097 9300 002b                 		sts  GPIOR2 , R16
+000099 d040                      		rcall	RESET_ALL	
+00009a 9478                      	L8:	sei
+00009b 2f83                      		mov k_region_correct , Random
+00009c 930f                      		push R16
+00009d 9100 002a                 		lds R16 , GPIOR1
+00009f 3006                      		cpi R16 , 6
+0000a0 f099                      		BREQ GAMEOVER
+0000a1 d006                      		rcall Trigger
+0000a2 9503                      		inc R16
+0000a3 9300 002a                 		sts GPIOR1 , R16
+0000a5 910f                      		pop R16
                                  	L4:
-0000ad 940c 0053                 		jmp RAISING_EDGE
+0000a6 940c 004a                 		jmp RAISING_EDGE
                                  
                                  
                                  
                                  ;----------The loop that send signal to trigger pin and set timer---------------------------- 
                                  TRIGGER:
-0000af 9a5c                      		sbi portd , 4
-0000b0 d005                      		rcall DELAY_10us
-0000b1 985c                      		cbi portd , 4
-0000b2 e003                      		ldi R16 , 0b00000011
-0000b3 9300 006f                 		sts TIMSK1 ,R16
-0000b5 9508                      		ret
+0000a8 9a5c                      		sbi portd , 4
+0000a9 d005                      		rcall DELAY_10us
+0000aa 985c                      		cbi portd , 4
+0000ab e003                      		ldi R16 , 0b00000011
+0000ac 9300 006f                 		sts TIMSK1 ,R16
+0000ae 9508                      		ret
                                  
                                  ;--------------------------------------Delay for sending trigger signal-----------------------
                                  ; The delay is a hardcoded 10us
                                  DELAY_10us:
-0000b6 e325                      			ldi  r18, 53
-0000b7 952a                      		L1: dec  r18
-0000b8 f7f1                      			brne L1
-0000b9 0000                      			nop
-0000ba 9508                      			ret
+0000af e325                      			ldi  r18, 53
+0000b0 952a                      		L1: dec  r18
+0000b1 f7f1                      			brne L1
+0000b2 0000                      			nop
+0000b3 9508                      			ret
                                  
                                  ;-------------------------Game over-----------------------------------------------
                                  ; The game overloop displays the attained score and displays red led if the score is negative
                                  ;
                                  ;
                                  GAMEOVER:
-0000bb e000                      		ldi R16, 0b00000000
-0000bc 9300 0070                 		sts  TIMSk2 , R16
-0000be 9180 001e                 		lds k_region_correct , GPIOR0
-0000c0 fd87                      		sbrc K_region_correct , 7
-0000c1 9a5e                      		sbi portd , 6
+0000b4 9180 001e                 		lds k_region_correct , GPIOR0
+0000b6 fd87                      		sbrc K_region_correct , 7
+0000b7 9a5e                      		sbi portd , 6
                                  	L12:
-0000c2 b988                      		out PORTC, k_region_correct
-0000c3 cffe                      		rjmp L12
+0000b8 b988                      		out PORTC, k_region_correct
+0000b9 cffe                      		rjmp L12
                                  
                                  ;----------------------------SCORE CAPTURE---------------------------------------
                                  ; The game consist of 12, K-region and the max score is 12 points, 
                                  ; displaying the score on PORTC is sufficient
                                  ; This is for decrementing the score
                                  decScore:
-0000c4 930f                      		push R16
-0000c5 b70f                      		in R16, sreg
-0000c6 930f                      		push R16
-0000c7 9100 001e                 		lds R16, GPIOR0							; Using General Purpose register 0 to store the score value
-0000c9 950a                      		Dec R16
-0000ca 910f                      		pop R16
-0000cb bf0f                      		out sreg , R16
-0000cc 910f                      		pop R16
-0000cd 9508                      		ret
+0000ba 930f                      		push R16
+0000bb b70f                      		in R16, sreg
+0000bc 930f                      		push R16
+0000bd 9100 001e                 		lds R16, GPIOR0							; Using General Purpose register 0 to store the score value
+0000bf 950a                      		Dec R16
+0000c0 910f                      		pop R16
+0000c1 bf0f                      		out sreg , R16
+0000c2 910f                      		pop R16
+0000c3 9508                      		ret
                                  
                                  ; This is the logic for incrementing the score
                                  Score_:
-0000ce 930f                      		push R16
-0000cf b70f                      		in R16, sreg
-0000d0 930f                      		push R16
-0000d1 9100 001e                 		lds R16, GPIOR0
-0000d3 9503                      		inc R16
-0000d4 3009                      		cpi R16 , 9
-0000d5 f049                      		BREQ L9
-0000d6 9503                      		inc R16
-0000d7 9300 001e                 		sts GPIOR0 , R16
-0000d9 fd03                      		sbrc  R16 , 3
-0000da 2700                      		clr R16
+0000c4 930f                      		push R16
+0000c5 b70f                      		in R16, sreg
+0000c6 930f                      		push R16
+0000c7 9100 001e                 		lds R16, GPIOR0
+0000c9 9503                      		inc R16
+0000ca 3009                      		cpi R16 , 9
+0000cb f049                      		BREQ L9
+0000cc 9503                      		inc R16
+0000cd 9300 001e                 		sts GPIOR0 , R16
+0000cf fd03                      		sbrc  R16 , 3
+0000d0 2700                      		clr R16
                                  	L10:
-0000db 910f                      		pop R16
-0000dc bf0f                      		out sreg , R16
-0000dd 910f                      		pop R16
-0000de 9508                      		ret
-0000df 2700                      	L9: clr R16
-0000e0 e100                      		ldi R16 , 16
-0000e1 9300 001e                 		sts GPIOR0 , R16
-0000e3 cff7                      		rjmp L10
+0000d1 910f                      		pop R16
+0000d2 bf0f                      		out sreg , R16
+0000d3 910f                      		pop R16
+0000d4 9508                      		ret
+0000d5 2700                      	L9: clr R16
+0000d6 e100                      		ldi R16 , 16
+0000d7 9300 001e                 		sts GPIOR0 , R16
+0000d9 cff7                      		rjmp L10
+                                 ;---------------------Reset all interactive registers---------------------------------------------------
+                                 	RESET_ALL :
+0000da 2755                      			clr K_region
+0000db 2788                      			clr k_region_correct
+0000dc 2700                      			clr R16
+0000dd 9350 001e                 			sts GPIOR0, K_region
+0000df 9350 002a                 			sts GPIOR1, K_region
+0000e1 9350 002b                 			sts GPIOR2, K_region
+0000e3 9508                      			ret
+                                 			
 
 
 RESOURCE USE INFORMATION
@@ -1323,7 +1328,7 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  83 r17:   4 r18:   2 r19:   5 r20:   4 
+r13:   0 r14:   0 r15:   0 r16:  80 r17:   4 r18:   2 r19:   5 r20:   4 
 r21:  10 r22:   0 r23:   0 r24:   6 r25:   4 r26:   4 r27:   0 r28:   0 
 r29:   6 r30:   0 r31:   0 
 Registers used: 10 out of 35 (28.6%)
@@ -1339,14 +1344,14 @@ clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :  12 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
 cpi   :   5 cpse  :   1 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   6 inc   :   7 jmp   :   6 
-ld    :   0 ldd   :   0 ldi   :  21 lds   :   7 lpm   :   0 lsl   :   0 
+ld    :   0 ldd   :   0 ldi   :  20 lds   :   7 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   1 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  12 pop   :  11 
-push  :   9 rcall :   7 ret   :   5 reti  :   1 rjmp  :  10 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   8 sbic  :   0 sbis  :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :  12 pop   :  10 
+push  :   9 rcall :   7 ret   :   5 reti  :   1 rjmp  :  11 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   9 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   2 sbrs  :   3 sec   :   0 seh   :   0 
-sei   :   2 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  20 
+sei   :   4 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  19 
 sub   :   3 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
 Instructions used: 28 out of 113 (24.8%)
 
