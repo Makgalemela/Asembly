@@ -23,26 +23,34 @@
   <FILE>main.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <Main><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>29</LINE></Main>
-  <FourSeconds><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>130</LINE></FourSeconds>
-  <four><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>112</LINE></four>
-  <TIMER1_SETUP><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>41</LINE></TIMER1_SETUP>
-  <Display_LED><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>67</LINE></Display_LED>
-  <RAISING_EDGE><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>77</LINE></RAISING_EDGE>
-  <FALLING_EDGE><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>85</LINE></FALLING_EDGE>
-  <GET_K_REGION><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>91</LINE></GET_K_REGION>
-  <DIVISION_By2><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>95</LINE></DIVISION_By2>
-  <Test><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>103</LINE></Test>
-  <Trigger><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>164</LINE></Trigger>
-  <Red><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>120</LINE></Red>
-  <TO><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>122</LINE></TO>
-  <L8><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>153</LINE></L8>
-  <L2><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>138</LINE></L2>
-  <L3><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>143</LINE></L3>
-  <Play_Mode><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>150</LINE></Play_Mode>
-  <L4><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>157</LINE></L4>
-  <DELAY_10us><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>172</LINE></DELAY_10us>
-  <L1><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>174</LINE></L1>
-  <GameOver><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>180</LINE></GameOver>
+  <Main><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>23</LINE></Main>
+  <Test_mode><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>120</LINE></Test_mode>
+  <Play_Mode><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>188</LINE></Play_Mode>
+  <Delay_Gen><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>164</LINE></Delay_Gen>
+  <Delay_4s><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>129</LINE></Delay_4s>
+  <TIMER1_SETUP_And_other_Interrups><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>35</LINE></TIMER1_SETUP_And_other_Interrups>
+  <RESET_ALL><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>62</LINE></RESET_ALL>
+  <Display_LED><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>74</LINE></Display_LED>
+  <RAISING_EDGE><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>90</LINE></RAISING_EDGE>
+  <FALLING_EDGE><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>98</LINE></FALLING_EDGE>
+  <GET_K_REGION><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>105</LINE></GET_K_REGION>
+  <DIVISION_By2><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>109</LINE></DIVISION_By2>
+  <wait><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>115</LINE></wait>
+  <Test><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>122</LINE></Test>
+  <Trigger><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>208</LINE></Trigger>
+  <TO><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>146</LINE></TO>
+  <Red><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>143</LINE></Red>
+  <score_><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>255</LINE></score_>
+  <decScore><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>243</LINE></decScore>
+  <L8><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>192</LINE></L8>
+  <L2><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>175</LINE></L2>
+  <L3><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>181</LINE></L3>
+  <GAMEOVER><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>229</LINE></GAMEOVER>
+  <L4><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>202</LINE></L4>
+  <DELAY_10us><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>218</LINE></DELAY_10us>
+  <L1><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>220</LINE></L1>
+  <L12><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>235</LINE></L12>
+  <L9><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>272</LINE></L9>
+  <L10><FILE>C:\Users\1473389\Desktop\main\main\main.asm</FILE><LINE>267</LINE></L10>
  </LABELS>
 </ASSEMBLER_INFO>
